@@ -26,8 +26,8 @@ function updateItsBeen(itsBeen, msElapsed, msTotal, divider) {
   itsBeen.find('.to-endure .val').text(numberWithCommas(((msTotal-msElapsed)/divider).toFixed(0)));
 }
 
-function updateTimes() {
-  var now = new Date();
+function updateTimes(now) {
+  now = now || new Date();
   var nowTS = now.getTime();
   
   var msTotal = endTS - startTS;
@@ -55,5 +55,13 @@ function animateTimes() {
 
 $(function() {
   addTooltips();
-  animateTimes();
+  
+  var match = document.location.href.match(/\?ts=([^&]+?)(&|$)/);
+  if (match) {
+    var freeze = new Date(match[1]);
+    $('.frozen').text(`As of ${freeze.toLocaleString()},`);
+    updateTimes(freeze);
+  } else {
+    animateTimes();
+  }
 });
