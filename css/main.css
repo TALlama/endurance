@@ -102,6 +102,7 @@ html {
 #content {
   padding: 0 20px;
   height: 100vh;
+  overflow: hidden;
   
   font-size: 2em;
   font-size: calc(.5em + 2vmax);
@@ -153,9 +154,45 @@ html {
 }
 
 #content small.percentage {
+  text-align: center;
   font-size: 80%;
   color: #888;
 }
+
+  #content.celebratory h1 {
+    font-size: 50%;
+  }
+
+  #content.celebratory small.percentage {
+    font-family: 'Asset', sans-serif;
+    font-size: 120%;
+    font-weight: 800;
+    animation: 1s infinite alternate color-shift;
+  }
+  
+  @keyframes color-shift {
+      0% { color:  red; }
+    100% { color: blue; }
+  }
+
+.sparkler--spark {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+
+  top: calc(100vh - 1.75em);
+  left: calc(50vw - 1.5em);
+
+  width: 3em;
+  height: 3em;
+  opacity: 1;
+  transform: scale(0.2);
+}
+
+  .sparkler--spark.yellow { background: radial-gradient(yellow .1em, hsla(0, 0%, 100%, 0) 1em); }
+  .sparkler--spark.red    { background: radial-gradient(red    .1em, hsla(0, 0%, 100%, 0) 1em); }
+  .sparkler--spark.blue   { background: radial-gradient(blue   .1em, hsla(0, 0%, 100%, 0) 1em); }
+  .sparkler--spark.green  { background: radial-gradient(green  .1em, hsla(0, 0%, 100%, 0) 1em); }
 
 /* ==========================================================================
    Helper classes

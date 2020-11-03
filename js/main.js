@@ -34,6 +34,18 @@ function updateTimes(now) {
   var msElapsed = nowTS - startTS;
   var msPercent = (msElapsed/msTotal*100.0);
   
+  if (msPercent > 100) {
+    msTotal = endTS - startTS;
+    msElapsed = endTS - startTS;
+  
+    $('.percentage').text(`Our long national nightmare is over.`);
+    $('#content').addClass('celebratory').attr('style', `background-size: 2%;`);
+    fireSparkler();
+  } else {
+    $('.percentage').text(`We're ${msPercent.toFixed(5)}% of the way through`);
+    $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
+  }
+  
   updateItsBeen($('#milliseconds.its-been'), msElapsed, msTotal, 1);
   updateItsBeen($('#seconds.its-been'), msElapsed, msTotal, 1000);
   updateItsBeen($('#minutes.its-been'), msElapsed, msTotal, 1000*60);
@@ -41,9 +53,6 @@ function updateTimes(now) {
   updateItsBeen($('#days.its-been'), msElapsed, msTotal, 1000*60*60*24);
   updateItsBeen($('#weeks.its-been'), msElapsed, msTotal, 1000*60*60*24*7);
   updateItsBeen($('#years.its-been'), msElapsed, msTotal, 1000*60*60*24*365.251);
-  
-  $('.percentage').text(`We're ${msPercent.toFixed(5)}% of the way through`);
-  $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
 }
 
 function animateTimes() {
@@ -65,3 +74,44 @@ $(function() {
     animateTimes();
   }
 });
+
+Array.prototype.sample = function sample() {
+  return this[Math.floor((Math.random()*this.length))];
+};
+
+function randomBetween(min, max) {
+  return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function fireSpark() {
+  let spark = document.createElement('article');
+  spark.classList.add('sparkler--spark')
+  spark.classList.add('red blue'.split(' ').sample());
+
+  let motionLength = randomBetween(400, 3000);
+  let opacityLength = randomBetween(400, motionLength);
+  spark.style.transition = `top ${motionLength}ms cubic-bezier(0, 1.4, 0.72, 1.4), left ${motionLength}ms cubic-bezier(0.215, 0.61, 0.355, 1), opacity ${opacityLength}ms cubic-bezier(0.95, 0.05, 0.795, 0.035), transform ${opacityLength}ms cubic-bezier(0.95, 0.05, 0.795, 0.035)`;
+  
+  $('#content').append(spark);
+  
+  requestAnimationFrame(function() {
+    let css = {
+      top: randomBetween(0, 80) + "vh",
+      left: randomBetween(20, 80) + "vw",
+      opacity: 0,
+      transform: 'scale(' + (1 + (randomBetween(-100, 200) / 100)) + ')'
+    };
+    $(spark).css(css);
+  });
+  
+  setTimeout(function() {
+    spark.remove();
+  }, motionLength * 1.1);
+}
+
+function fireSparkler() {
+  requestAnimationFrame(function() {
+    fireSpark();
+    fireSparkler();
+  });
+}
