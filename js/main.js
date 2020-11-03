@@ -43,7 +43,7 @@ function updateTimes(now) {
   updateItsBeen($('#years.its-been'), msElapsed, msTotal, 1000*60*60*24*365.251);
   
   $('.percentage').text(`We're ${msPercent.toFixed(5)}% of the way through`);
-  $('#content').attr('style', `background-position: 50% ${100+msPercent}%;`);
+  $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
 }
 
 function animateTimes() {
