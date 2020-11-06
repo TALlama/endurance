@@ -1,5 +1,6 @@
 var startTS = Date.UTC(2017, 0, 20, 7, 0, 0);
 var endTS = Date.UTC(2021, 0, 20, 7, 0, 0);
+var callTS = Date.UTC(2020, 10, 4, 13, 50, 0); /* https://twitter.com/DecisionDeskHQ/status/1324710866516905984 */
 
 function numberWithCommas(n) {
     var parts=n.toString().split(".");
@@ -40,10 +41,19 @@ function updateTimes(now) {
   
     $('.percentage').text(`Our long national nightmare is over.`);
     $('#content').addClass('celebratory').attr('style', `background-size: 2%;`);
-    fireSparkler();
+    celebrate('red blue', 100);
   } else {
     $('.percentage').text(`We're ${msPercent.toFixed(5)}% of the way through`);
     $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
+    
+    if (nowTS > callTS) {
+      var msCallTotal = endTS - callTS;
+      var msCallElapsed = nowTS - callTS;
+      var msCallPercent = (msCallElapsed/msCallTotal*100.0);
+      
+      celebrate('orange yellow', msCallPercent);
+      $('.percentage').append($('<br/>')).append(`and the end is near`);
+    }
   }
   
   updateItsBeen($('#milliseconds.its-been'), msElapsed, msTotal, 1);
@@ -60,6 +70,13 @@ function animateTimes() {
     updateTimes();
     animateTimes();
   });
+}
+
+function celebrate(colors, percent) {
+  if (window.celebrating) return;
+  
+  window.celebrating = true
+  fireSparkler(colors, percent);
 }
 
 $(function() {
@@ -83,10 +100,12 @@ function randomBetween(min, max) {
   return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-function fireSpark() {
+function fireSpark(colors, weight) {
+  if (randomBetween(1, 100) > weight) return;
+  
   let spark = document.createElement('article');
   spark.classList.add('sparkler--spark')
-  spark.classList.add('red blue'.split(' ').sample());
+  spark.classList.add(colors.split(' ').sample());
 
   let motionLength = randomBetween(400, 3000);
   let opacityLength = randomBetween(400, motionLength);
@@ -109,9 +128,9 @@ function fireSpark() {
   }, motionLength * 1.1);
 }
 
-function fireSparkler() {
+function fireSparkler(colors, weight) {
   requestAnimationFrame(function() {
-    fireSpark();
-    fireSparkler();
+    fireSpark(colors, weight);
+    fireSparkler(colors, weight);
   });
 }

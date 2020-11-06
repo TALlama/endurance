@@ -189,6 +189,7 @@ html {
   transform: scale(0.2);
 }
 
+  .sparkler--spark.orange { background: radial-gradient(orange .1em, hsla(0, 0%, 100%, 0) 1em); }
   .sparkler--spark.yellow { background: radial-gradient(yellow .1em, hsla(0, 0%, 100%, 0) 1em); }
   .sparkler--spark.red    { background: radial-gradient(red    .1em, hsla(0, 0%, 100%, 0) 1em); }
   .sparkler--spark.blue   { background: radial-gradient(blue   .1em, hsla(0, 0%, 100%, 0) 1em); }
