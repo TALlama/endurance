@@ -1,5 +1,5 @@
 var startTS = Date.UTC(2017, 0, 20, 7, 0, 0);
-var endTS = Date.UTC(2021, 0, 20, 20, 0, 0);
+var endTS = Date.UTC(2021, 0, 20, 17, 0, 0);
 var callTS = Date.UTC(2020, 10, 4, 13, 50, 0); /* https://twitter.com/DecisionDeskHQ/status/1324710866516905984 */
 var celebrationColors = [];
 
