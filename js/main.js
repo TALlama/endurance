@@ -1,6 +1,7 @@
 var startTS = Date.UTC(2017, 0, 20, 7, 0, 0);
-var endTS = Date.UTC(2021, 0, 20, 7, 0, 0);
+var endTS = Date.UTC(2021, 0, 20, 20, 0, 0);
 var callTS = Date.UTC(2020, 10, 4, 13, 50, 0); /* https://twitter.com/DecisionDeskHQ/status/1324710866516905984 */
+var celebrationColors = [];
 
 function numberWithCommas(n) {
     var parts=n.toString().split(".");
@@ -35,13 +36,14 @@ function updateTimes(now) {
   var msElapsed = nowTS - startTS;
   var msPercent = (msElapsed/msTotal*100.0);
   
-  if (msPercent > 100) {
+  if (msPercent >= 100) {
     msTotal = endTS - startTS;
     msElapsed = endTS - startTS;
   
     $('.percentage').text(`Our long national nightmare is over.`);
     $('#content').addClass('celebratory').attr('style', `background-size: 2%;`);
-    celebrate('red blue', 100);
+    celebrationColors = ['red', 'blue'];
+    celebrate(100);
   } else {
     $('.percentage').text(`We're ${msPercent.toFixed(5)}% of the way through`);
     $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
@@ -51,7 +53,8 @@ function updateTimes(now) {
       var msCallElapsed = nowTS - callTS;
       var msCallPercent = (msCallElapsed/msCallTotal*100.0);
       
-      celebrate('orange yellow', msCallPercent);
+      celebrationColors = ['orange', 'yellow'];
+      celebrate(msCallPercent);
       $('.percentage').append($('<br/>')).append(`and the end is near`);
     }
   }
@@ -72,11 +75,11 @@ function animateTimes() {
   });
 }
 
-function celebrate(colors, percent) {
+function celebrate(percent) {
   if (window.celebrating) return;
   
   window.celebrating = true
-  fireSparkler(colors, percent);
+  fireSparkler(percent);
 }
 
 $(function() {
@@ -105,7 +108,7 @@ function fireSpark(colors, weight) {
   
   let spark = document.createElement('article');
   spark.classList.add('sparkler--spark')
-  spark.classList.add(colors.split(' ').sample());
+  spark.classList.add(colors.sample());
 
   let motionLength = randomBetween(400, 3000);
   let opacityLength = randomBetween(400, motionLength);
@@ -128,9 +131,9 @@ function fireSpark(colors, weight) {
   }, motionLength * 1.1);
 }
 
-function fireSparkler(colors, weight) {
+function fireSparkler(weight) {
   requestAnimationFrame(function() {
-    fireSpark(colors, weight);
-    fireSparkler(colors, weight);
+    fireSpark(celebrationColors, weight);
+    fireSparkler(weight);
   });
 }
