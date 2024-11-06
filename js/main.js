@@ -1,6 +1,6 @@
-var startTS = Date.UTC(2017, 0, 20, 7, 0, 0);
-var endTS = Date.UTC(2021, 0, 20, 17, 0, 0);
-var callTS = Date.UTC(2020, 10, 4, 13, 50, 0); /* https://twitter.com/DecisionDeskHQ/status/1324710866516905984 */
+var startTS = Date.UTC(2025, 0, 20, 7, 0, 0);
+var endTS = Date.UTC(2029, 0, 20, 17, 0, 0);
+var callTS = Date.UTC(2030, 10, 4, 13, 50, 0); /* https://twitter.com/DecisionDeskHQ/status/1324710866516905984 */
 var celebrationColors = [];
 
 function numberWithCommas(n) {
@@ -24,8 +24,13 @@ function addTooltip(itsBeen, label, slice) {
 }
 
 function updateItsBeen(itsBeen, msElapsed, msTotal, divider) {
-  itsBeen.find('.elapsed .val').text(numberWithCommas((msElapsed/divider).toFixed(0)));
-  itsBeen.find('.to-endure .val').text(numberWithCommas(((msTotal-msElapsed)/divider).toFixed(0)));
+  itsBeen.find('.elapsed .val').text(numberWithCommas(Math.abs(msElapsed/divider).toFixed(0)));
+
+  if (Math.floor(msElapsed / 500) % 17 === 0 && Math.floor((msTotal-msElapsed) / divider) % 7 === 0) {
+    itsBeen.find('.to-endure .val').text("Forever?");
+  } else {
+    itsBeen.find('.to-endure .val').text(numberWithCommas(((msTotal-msElapsed)/divider).toFixed(0)));
+  }
 }
 
 function updateTimes(now) {
@@ -44,6 +49,10 @@ function updateTimes(now) {
     $('#content').addClass('celebratory').attr('style', `background-size: 2%;`);
     celebrationColors = ['red', 'blue'];
     celebrate(100);
+  } else if (msPercent <= 0) {
+    $('.percentage').text(`We haven't even started.`);
+    $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
+    $(".endured").text("until inauguration");
   } else {
     $('.percentage').text(`We're ${msPercent.toFixed(5)}% of the way through`);
     $('#content').attr('style', `background-size: ${100 - msPercent}%;`);
